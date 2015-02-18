@@ -18,12 +18,15 @@
 #include "avrlib/base.h"
 
 #include "cvpal/dac.h"
+#include "cvpal/74hc595.h"
 #include "cvpal/midi_handler.h"
 #include "cvpal/usb_handler.h"
 
 using namespace cvpal;
 
-Dac dac;
+Dac<PA7> dac1;
+Dac<PA6> dac2;
+IC74HC595 ic74hc595;
 UsbHandler usb_handler;
 MidiHandler midi_handler;
 
@@ -35,13 +38,9 @@ ISR(TIM0_COMPA_vect) {
 }
 
 void Init() {
-  // Initialize Gate outputs.
-  DDRA |= _BV(PA6);  // GATE 1
-  PORTA &= ~_BV(PA6);
-  DDRA |= _BV(PA3);  // GATE 2
-  PORTA &= ~_BV(PA3);
-  
-  dac.Init();
+  dac1.Init();
+  dac2.Init();
+  ic74hc595.Init();
   midi_handler.Init();
   usb_handler.Init(&midi_handler);
   
@@ -63,26 +62,18 @@ int main(void) {
       midi_handler.Render();
       const State& state = midi_handler.state();
 
-      dac.Write(state.cv[0], state.cv[1]);
-      if (state.dco_frequency) {
-        // Gate 1 = DCO.
-        TCCR1A = _BV(COM1A1);
-        ICR1 = state.dco_frequency;
-        OCR1A = state.dco_frequency >> 1;
-      } else {
-        // Gate 1 = digital output.
-        TCCR1A = 0;
-        if (state.gate[0]) {
-          PORTA |= _BV(PA6);
-        } else {
-          PORTA &= ~_BV(PA6);
-        }
-      }
-      if (state.gate[1]) {
-        PORTA |= _BV(PA3);
-      } else {
-        PORTA &= ~_BV(PA3);
-      }
+      dac1.Write(state.cv[0], state.cv[1]);
+      dac2.Write(state.cv[2], state.cv[3]);
+      // Combine gates.
+      uint8_t gate = (uint8_t)(state.gates[0]);
+      gate |= (uint8_t)(state.gates[1]) << 1;
+      gate |= (uint8_t)(state.gates[2]) << 2;
+      gate |= (uint8_t)(state.gates[3]) << 3;
+      gate |= (uint8_t)(state.gates[4]) << 4;
+      gate |= (uint8_t)(state.gates[5]) << 5;
+      gate |= (uint8_t)(state.gates[6]) << 6;
+      gate |= (uint8_t)(state.gates[7]) << 7;
+      ic74hc595.Write(gate);
     }
     if (control_clock_tick) {
       --control_clock_tick;

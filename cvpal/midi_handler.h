@@ -18,20 +18,18 @@
 // Summary of conversion modes
 // 
 // CH1       Mono CV/Velocity.
-// CH2       Mono CV/Velocity with DCO.
-// CH3/CH4   Dual CV.
-// CH5       Poly CV.
-// CH6       CC conversion.
-// CH7       Mono CV/Gate with CC0 (undocumented)
-// CH8       Mono CV/Gate with CC1 (undocumented)
-// CH9       Drums 36/38 with velocity (undocumented)
-// CH10      Drums
-// CH11      Drums with gate
-// CH12      Mono CV/Gate/Start/Clock 24ppqn
-// CH13      Mono CV/Gate/Start/Clock 8ppqn
-// CH14      Mono CV/Gate/Start/Clock 4ppqn
-// CH15      Channel 1 calibration
-// CH16      Channel 2 calibration
+// CH2-5     Quad CV.
+// CH6       Poly CV.
+// CH7       CC conversion.
+// CH8       Mono CV/Gate with CC0 (undocumented)
+// CH9       Mono CV/Gate with CC1 (undocumented)
+// CH10      Drums 36/38 with velocity (undocumented)
+// CH11      Drums
+// CH12      Drums with gate
+// CH13      Channel 1 calibration
+// CH14      Channel 2 calibration
+// CH15      Channel 3 calibration
+// CH16      Channel 4 calibration
 
 #ifndef CVPAL_MIDI_HANDLER_H_
 #define CVPAL_MIDI_HANDLER_H_
@@ -44,14 +42,14 @@
 
 namespace cvpal {
 
-const uint8_t kNumVoices = 2;
+const uint8_t kNumVoices = 4;
 const uint8_t kRetriggerDuration = 2;
-const uint8_t kNumDrumChannels = 4;
+const uint8_t kNumDrumChannels = 8;
 
 struct State {
   uint16_t cv[kNumVoices];
-  bool gate[kNumVoices];
-  uint16_t dco_frequency;
+  //uint8_t gate;
+  bool gates[8];
 };
 
 class MidiHandler {
@@ -79,9 +77,8 @@ class MidiHandler {
   void RealtimeMessage(uint8_t byte);
 
   void RenderMonoCvGate();
-  void RenderMonoCvGateWithDco();
   void RenderMonoCvGateWithClock();
-  void RenderDualCvGate();
+  void RenderQuadCvGate();
   void RenderPolyCv();
   void RenderCcConversion();
   void RenderMonoCvGateCc();

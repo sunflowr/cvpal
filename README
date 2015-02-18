@@ -7,3 +7,44 @@ V-USB virtual USB library.
 
 The PCB layouts and schematics (in cvpal/hardware_design/pcb)
 are released under a Creative Commons cc-by-sa 3.0 license.
+
+------
+
+A extended version of CVpal, now with 4 CV out and 8 gates/triggers.
+No real schematic for it, only a breadboard layout - sorry.
+
+Hacked together by Johan Anderson (https://github.com/sunflowr/)
+
+Modes:
+CH1 - Mono mode.
+---
+CV1       Note
+CV2       Velocity
+CV3       CC0
+CV4       CC1
+G1/2/3/4  Gate
+G5        24 PPQ
+G6        8 PPQ
+G7        4 PPQ
+G8        Start trigger
+
+CH2/3/4/5 - Quad mono mode.
+---
+CV1       Note CH2
+CV2       Note CH3
+CV3       Note CH4
+CV4       Note CH5
+G1        Gate CH2
+G2        Gate CH3
+G3        Gate CH4
+G4        Gate CH5
+G5        24 PPQ
+G6        8 PPQ
+G7        4 PPQ
+G8        Start trigger
+
+CH6 - Quadrophic mode.
+---
+
+[ Rest of modes to be documented soon :) ]
+

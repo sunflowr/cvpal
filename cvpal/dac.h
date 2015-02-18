@@ -22,6 +22,7 @@
 
 namespace cvpal {
 
+template<uint8_t _Port>
 class Dac {
  public:
   Dac() { }
@@ -29,20 +30,20 @@ class Dac {
   
   static inline void Init() {
     // Initialize SPI
-    DDRA |= _BV(PA7);  // SS
-    PORTA |= _BV(PA7);
+    DDRA |= _BV(_Port);  // SS
+    PORTA |= _BV(_Port);
     DDRA |= _BV(PA5);  // MOSI
     DDRA |= _BV(PA4);  // SCK
   }
   
   static inline void Write(uint16_t a, uint16_t b) {
-    PORTA &= ~_BV(PA7);
+    PORTA &= ~_BV(_Port);
     SpiSend(0x1000 | a);
-    PORTA |= _BV(PA7);
+    PORTA |= _BV(_Port);
 
-    PORTA &= ~_BV(PA7);
+    PORTA &= ~_BV(_Port);
     SpiSend(0x9000 | b);
-    PORTA |= _BV(PA7);
+    PORTA |= _BV(_Port);
   }
   
  private:
