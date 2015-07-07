@@ -15,6 +15,10 @@ No real schematic for it, only a breadboard layout - sorry.
 
 Hacked together by Johan Anderson (https://github.com/sunflowr/)
 
+Part of the functionality is still the same (such as calibration).
+Original manual can be found here: http://mutable-instruments.net/modules/cvpal/manual
+
+
 Modes:
 CH1 - Mono mode.
 ---
@@ -43,8 +47,78 @@ G6        8 PPQ
 G7        4 PPQ
 G8        Start trigger
 
-CH6 - Quadrophic mode.
+CH6 - Quadrophonic mode.
 ---
+Like the old Duophonic mode except support for four voices instead of two:
+
+This mode is enabled when a MIDI message is received on channel 6. The CVpal behaves like a quadrophonic CV-Gate converter with voice stealing.
+
+CV1       Note CV output 1
+CV2       Note CV output 2
+CV3       Note CV output 3
+CV4       Note CV output 4
+G1        Gate
+G2        Gate
+G3        Gate
+G4        Gate
+G5        24 PPQ
+G6        8 PPQ
+G7        4 PPQ
+G8        Start trigger
+
+CH7 - CC conversion
+---
+(not tested to much.. probably buggy)
+To be implemented - currently disabled.
+
+CH8/9 - Note conversion + CC
+---
+(not tested to much.. probably buggy)
+To be documented.
+
+CH10 - Drums with velocity.
+---
+(not tested to much.. probably buggy)
+CV1       Drum 1 velocity.
+CV2       Drum 2 velocity.
+CV3       Drum 3 velocity.
+CV4       Drum 4 velocity.
+G1        Drum 1 Gate
+G2        Drum 2 Gate
+G3        Drum 3 Gate
+G4        Drum 4 Gate
+G5        24 PPQ
+G6        8 PPQ
+G7        4 PPQ
+G8        Start trigger
+To be documented.
+
+CH11 - Drum triggers.
+(not tested to much.. probably buggy)
+---
+G1        Drum 1 trigger
+G2        Drum 2 trigger
+G3        Drum 3 trigger
+G4        Drum 4 trigger
+G5        24 PPQ
+G6        8 PPQ
+G7        4 PPQ
+G8        Start trigger
+
+CH12 - Drum gates.
+---
+Same as CH11, but with gates instead of triggers.
+
+CH13/14/15/16
+---
+Calibration.
+See http://mutable-instruments.net/modules/cvpal/manual
+
+OUT 1 is calibrated by sending note messages to channel 13.
+OUT 2 is calibrated by sending note messages to channel 14.
+OUT 3 is calibrated by sending note messages to channel 15.
+OUT 4 is calibrated by sending note messages to channel 16.
+
 
 [ Rest of modes to be documented soon :) ]
 

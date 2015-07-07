@@ -89,9 +89,28 @@ void MidiHandler::Parse(const uint8_t* data, uint8_t size) {
     uint8_t code_index = data[0] & 0xf;
     uint8_t channel = data[1] & 0xf;
     
-    if (code_index != 0x0f && channel != most_recent_channel_) {
-      if (!((most_recent_channel_ == 2 && channel == 3) ||
-            (most_recent_channel_ == 3 && channel == 2))) {
+    if(code_index != 0x0f && channel != most_recent_channel_)
+    {
+      switch(most_recent_channel_)
+      {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+        switch(channel)
+        {
+        case 1:
+        case 2:
+        case 3:
+        case 4:
+          break;
+
+        default:
+          Reset();
+        }
+        break;
+
+      default:
         Reset();
       }
     }
@@ -151,6 +170,14 @@ void MidiHandler::RealtimeMessage(uint8_t byte) {
       }*/
     } else if (byte == 0xfa) {
       // Start
+      clock_counter_ = 0;
+      //drum_channel_[7].Trigger(0);
+    } else if (byte == 0xfb) {
+      // Continue
+      clock_counter_ = 0;
+      //drum_channel_[7].Trigger(0);
+    } else if (byte == 0xfc) {
+      // Stop
       clock_counter_ = 0;
       drum_channel_[7].Trigger(0);
     }
